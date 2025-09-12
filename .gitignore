@@ -9,4 +9,6 @@
 !link_claude.sh
 !settings.json
 !statusline-enhanced.sh
+!setup.sh
+!install.sh
 !.gitignore
