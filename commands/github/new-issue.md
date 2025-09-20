@@ -1,0 +1,2 @@
+1. Use [FeatureName][001] format for the issue title. FeatureName should be copmact and 001 is the step order of the feature implementation.
+2. When adding new issue, check the existing active issues to see if there's a duplication. Just tell from the title.
