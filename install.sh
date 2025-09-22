@@ -191,44 +191,14 @@ download_or_update_source() {
     log "Cloning repository from $REPO_URL"
     run_command "git clone \"$REPO_URL\" \"$CLAUDE_SOURCE_DIR\""
     
-    # Check if claude directory exists in the repo
-    local claude_config_dir="$CLAUDE_SOURCE_DIR/claude"
-    if [[ $DRY_RUN -eq 0 && ! -d "$claude_config_dir" ]]; then
-        error "Claude configuration directory not found in repository at $claude_config_dir"
-        exit 1
-    fi
-    
     log "✓ Repository downloaded successfully"
-}
-
-create_necessary_directories() {
-    log "Creating necessary directories..."
-    
-    local source_claude_dir="$CLAUDE_SOURCE_DIR/claude"
-    local dirs=(
-        "$source_claude_dir/commands"
-        "$source_claude_dir/projects" 
-        "$source_claude_dir/todos"
-        "$source_claude_dir/shell-snapshots"
-        "$source_claude_dir/statsig"
-        "$source_claude_dir/local"
-    )
-    
-    for dir in "${dirs[@]}"; do
-        if [[ ! -d "$dir" ]]; then
-            run_command "mkdir -p \"$dir\""
-            log "✓ Created directory: $(basename "$dir")"
-        fi
-    done
 }
 
 setup_permissions() {
     log "Setting up file permissions..."
     
-    local source_claude_dir="$CLAUDE_SOURCE_DIR/claude"
-    
     # Make shell scripts executable
-    run_command "find \"$source_claude_dir\" -name '*.sh' -type f -exec chmod +x {} +"
+    run_command "find \"$CLAUDE_SOURCE_DIR\" -name '*.sh' -type f -exec chmod +x {} +"
     
     log "✓ Permissions configured"
 }
@@ -236,13 +206,11 @@ setup_permissions() {
 create_symlink() {
     log "Setting up symbolic link..."
     
-    local source_claude_dir="$CLAUDE_SOURCE_DIR/claude"
-    
     if [[ -e "$CLAUDE_DIR" || -L "$CLAUDE_DIR" ]]; then
         if [[ -L "$CLAUDE_DIR" ]]; then
             local current_target
             current_target="$(readlink "$CLAUDE_DIR")"
-            if [[ "$current_target" == "$source_claude_dir" ]]; then
+            if [[ "$current_target" == "$CLAUDE_SOURCE_DIR" ]]; then
                 log "✓ Symbolic link already exists and points to correct location"
                 return
             fi
@@ -252,8 +220,8 @@ create_symlink() {
         run_command "rm -rf \"$CLAUDE_DIR\""
     fi
     
-    log "Creating symbolic link: $CLAUDE_DIR -> $source_claude_dir"
-    run_command "ln -s \"$source_claude_dir\" \"$CLAUDE_DIR\""
+    log "Creating symbolic link: $CLAUDE_DIR -> $CLAUDE_SOURCE_DIR"
+    run_command "ln -s \"$CLAUDE_SOURCE_DIR\" \"$CLAUDE_DIR\""
     log "✓ Symbolic link created successfully"
 }
 
@@ -262,8 +230,7 @@ verify_installation() {
     
     local files_to_check=(
         "$CLAUDE_DIR/settings.json"
-        "$CLAUDE_DIR/statusline-enhanced.sh" 
-        "$CLAUDE_DIR/link_claude.sh"
+        "$CLAUDE_DIR/statusline-enhanced.sh"
     )
     
     local all_good=1
@@ -280,7 +247,7 @@ verify_installation() {
     if [[ -L "$CLAUDE_DIR" ]]; then
         local link_target
         link_target="$(readlink "$CLAUDE_DIR")"
-        if [[ "$link_target" == "$CLAUDE_SOURCE_DIR/claude" ]]; then
+        if [[ "$link_target" == "$CLAUDE_SOURCE_DIR" ]]; then
             log "✓ Symbolic link is correctly configured"
         else
             error "✗ Symbolic link points to wrong location: $link_target"
@@ -308,7 +275,7 @@ print_completion_message() {
     echo -e "${BLUE}Your Claude Code configuration has been successfully installed!${NC}"
     echo
     echo -e "${PURPLE}Source repository:${NC} $CLAUDE_SOURCE_DIR"
-    echo -e "${PURPLE}Configuration symlink:${NC} $CLAUDE_DIR -> $CLAUDE_SOURCE_DIR/claude"
+    echo -e "${PURPLE}Configuration symlink:${NC} $CLAUDE_DIR -> $CLAUDE_SOURCE_DIR"
     if [[ -d "$BACKUP_DIR" ]]; then
         echo -e "${PURPLE}Previous config backed up to:${NC} $BACKUP_DIR"
     fi
@@ -347,7 +314,6 @@ main() {
     check_dependencies
     backup_existing_claude
     download_or_update_source
-    create_necessary_directories
     setup_permissions
     create_symlink
     
