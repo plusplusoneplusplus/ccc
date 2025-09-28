@@ -140,11 +140,17 @@ backup_existing_claude() {
     if [[ -e "$CLAUDE_DIR" ]]; then
         if [[ $FORCE -eq 0 && $DRY_RUN -eq 0 ]]; then
             warn "Existing Claude configuration found at $CLAUDE_DIR"
-            echo -n "Do you want to backup and replace it? [Y/n] "
-            read -r response
-            if [[ "$response" =~ ^[Nn]$ ]]; then
-                log "Setup cancelled by user"
-                exit 0
+            if [[ -t 0 ]]; then
+                # TTY is available, can prompt user
+                echo -n "Do you want to backup and replace it? [Y/n] "
+                read -r response
+                if [[ "$response" =~ ^[Nn]$ ]]; then
+                    log "Setup cancelled by user"
+                    exit 0
+                fi
+            else
+                # No TTY, default to yes
+                log "No TTY detected, defaulting to backup and replace (use --force to skip this check)"
             fi
         elif [[ $DRY_RUN -eq 1 ]]; then
             warn "Existing Claude configuration found at $CLAUDE_DIR"
