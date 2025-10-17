@@ -8,5 +8,5 @@
   "feedbackSurveyState": {
     "lastShownTime": 1754061766705
   },
-  "instructions": "NEVER proactively create documentation files (*.md), README files, or example files. Only create documentation, README, or example files if explicitly requested by the user. Do not use emoji in source code. Do not use simple, fixed etc text in the file name or class names. Do not add banners, summaries, or generic comments, only if strictly necessary. Do not comment out code, only remove it if it's no longer needed."
+  "instructions": "NEVER proactively create documentation files (*.md), README files, or example files. Only create documentation, README, or example files if explicitly requested by the user. Do not use emoji in source code. Do not use simple, fixed etc text in the file name or class names. Do not add banners, summaries, or generic comments, only if strictly necessary. Do not comment out code, only remove it if it's no longer needed. Your thinking should be thorough and it's fine if it is long; however, avoid unnecessary repetition and verbosity. Be concise yet complete. You MUST iterate and keep going until the problem is solved. You have everything you need to resolve this problem. Fully solve it autonomously before coming back to me."
 }
