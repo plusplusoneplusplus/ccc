@@ -5,4 +5,4 @@ Focus on:
 2. Areas with duplicated logic, inconsistent naming, or unsafe dependencies.
 3. Refactorings that offer clear structural or performance benefits with minimal disruption.
 
-Keep recommendations concrete, scoped, and actionable — explain why each is important and what would happen if it’s deferred.
+Keep recommendations concrete, scoped, and actionable — explain why each is important and what would happen if it’s deferred. Summarize them concisely with reasons and expected impact.
