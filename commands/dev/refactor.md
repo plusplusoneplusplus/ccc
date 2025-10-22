@@ -1,4 +1,4 @@
-Investigate the codebase (or the specified components/areas) and identify any code refactoring that must be done soon to prevent future technical debt or maintenance risks.
+Investigate the codebase (or the specified components/areas, or a commit/PR provided by user) and identify any code refactoring that must be done soon to prevent future technical debt or maintenance risks.
 
 Focus on:
 1. Code smells, outdated patterns, or poor abstractions that will block scalability, testing, or readability.
