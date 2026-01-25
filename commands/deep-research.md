@@ -1,1 +1,0 @@
-../.github/prompts/deep-research.prompt.md
